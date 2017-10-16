@@ -1,0 +1,478 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns = "http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv = "Content-Type" content="text/html; charset=UTF-8" />
+    <title></title>
+</head>
+<body>
+
+<table width="615" border="0" cellpadding="0" cellspacing="0" style="margin-left: -20px; padding-top: 67px;">
+    <tr>
+        <td align="left"><img src="https://crm.ilga.org/sites/default/files/civicrm/persist/contribute/ilga-logo.jpeg" height="100px" width="100px"></td>
+    </tr>
+</table>
+
+<br>
+
+{capture assign=lang}{contact.preferred_language}{/capture}
+{if $lang eq "es_ES"}
+{*Spanish Translation*}
+<table width="615" style="margin-left: -20px;">
+    <tr>
+        <td>
+            <table width="100%" cellpadding="4" cellspacing="0">
+                <tr valign="top">
+                    <td width="50%" style="border: none; padding: 0cm; font-size:11px; font-family: Arial, Verdana, sans-serif;">
+                        <b>identificación de la organización miembro: </b> {contact.contact_id}<br>
+                        <b>fecha: </b>{ts} {$invoice_date|date_format:"%e %B %Y"}{/ts}<br>
+                        <b>echa de vencimiento: </b>{ts} {$dueDate|date_format:"%e %B %Y"}{/ts}<br>
+                        <b>recibo No: </b> {$invoice_id}/{contact.contact_id}<br>
+                    </td>
+                    <td width="50%" align="right" style="border: none; padding: 0cm; font-size:11px; font-family: Arial, Verdana, sans-serif;">
+                        <table>
+                            <tr>
+                                <td>
+                                    {if $organization_name}
+                                    <b><div style="font-size:11px; font-family: Arial, Verdana, sans-serif;">{$organization_name}</div></b>
+                                    {else}
+                                    <b><div style="font-size:11px; font-family: Arial, Verdana, sans-serif;">{$display_name}</div></b>
+                                    {/if}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="font-size:11px; font-family: Arial, Verdana, sans-serif;">
+                                        {contact.street_address}<br>
+                                        {contact.postal_code} {contact.city}<br>
+                                        {contact.country}
+                                    </div>
+                                    <br><br>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+{else}{*End Spanish begin English Translation*}
+<table width="615" style="margin-left: -20px;">
+    <tr>
+        <td>
+            <table width="100%" cellpadding="4" cellspacing="0">
+                <tr valign="top">
+                    <td width="50%" style="border: none; padding: 0cm; font-size:11px; font-family: Arial, Verdana, sans-serif;">
+                        <b>Member-id: </b> {contact.contact_id}<br>
+                        <b>Date: </b>{ts} {$invoice_date|date_format:"%e %B %Y"}{/ts}<br>
+                        <b>Due date: </b>{ts} {$dueDate|date_format:"%e %B %Y"}{/ts}<br>
+                        <b>Invoice nr: </b> {$invoice_id}/{contact.contact_id}<br>
+                    </td>
+                    <td width="50%" align="right" style="border: none; padding: 0cm; font-size:11px; font-family: Arial, Verdana, sans-serif;">
+                        <table>
+                            <tr>
+                                <td>
+                                    {if $organization_name}
+                                    <b><div style="font-size:11px; font-family: Arial, Verdana, sans-serif;">{$organization_name}</div></b>
+                                    {else}
+                                    <b><div style="font-size:11px; font-family: Arial, Verdana, sans-serif;">{$display_name}</div></b>
+                                    {/if}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="font-size:11px; font-family: Arial, Verdana, sans-serif;">
+                                        {contact.street_address}<br>
+                                        {contact.postal_code} {contact.city}<br>
+                                        {contact.country}
+                                    </div>
+                                    <br><br>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+{/if}{*End English*}
+<table width="615" border="0" cellpadding="0" cellspacing="0" id="desc" style="margin-left: -20px; font-family: Arial, Verdana, sans-serif;">
+    <tr>
+        <td colspan="2" {$valueStyle}>
+            <table> {* FIXME: style this table so that it looks like the text version (justification, etc.) *}
+                <tr>
+                    <th style="padding-right:30px;text-align:left;font-weight:bold;width:180px;"><font size="1">Description</font></th>
+                    <th style="padding-left:30px;text-align:right;font-weight:bold;width:50px;" ><font size="1">Nr.</font></th>
+                    <th style="padding-left:30px;text-align:right;font-weight:bold;width:60px;"><font size="1">Unit Pr.</font></th>
+                    <th style="padding-left:30px;text-align:right;font-weight:bold;width:40px;"><font size="1">{ts}VAT{/ts}</font></th>
+                    <th style="padding-left:30px;text-align:right;font-weight:bold;width:70px"><font size="1">{ts}Amount{/ts}</font></th>
+                </tr>
+                {foreach from=$lineItem item=value key=priceset name=taxpricevalue}
+                {if $smarty.foreach.taxpricevalue.index eq 0}
+                <tr>
+                    <td colspan="5" ><hr size="3" style="color:#000;"></hr></td>
+                </tr>
+                {else}
+                <tr>
+                    <td colspan="5" style="color:#F5F5F5;"><hr></hr></td>
+                </tr>
+                {/if}
+                <tr>
+                    <td style="text-align:left;"><font size="1">
+                        {if $value.html_type eq 'Text'}
+                        {ts}{$value.label}{/ts}
+                        {else}
+                        {ts}{$value.field_title} - {$value.label}{/ts}
+                        {/if}
+                        {if $value.description}
+                        <div>{$source|truncate:40:"..."}</div>
+                        {/if}
+                    </font>
+                    </td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1"> {$value.qty}</font></td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1"> {$value.unit_price|crmMoney:$currency}</font></td>
+                    {if $value.tax_amount != ''}
+                    <td style="padding-left:34px;text-align:right;width:20px;"><font size="1"> {$value.tax_rate}%</font></td>
+                    {else}
+                    <td style="padding-left:34px;text-align:right;width:20px;"><font size="1">{ts 1=$taxTerm}No %1{/ts}</font></td>
+                    {/if}
+                    <td style="padding-left:34px;text-align:right;"><font size="1">{$value.subTotal|crmMoney:$currency}</font></td>
+                </tr>
+                {/foreach}
+                <tr><td  colspan="5" style="color:#F5F5F5;"><hr></hr></td></tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td style="padding-left:20px;text-align:right;"><font size="1">{ts}Total excl. VAT{/ts}</font></td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1"> {$subTotal|crmMoney:$currency}</font></td>
+                </tr>
+                {foreach from = $dataArray item = value key = priceset}
+                <tr>
+                    <td colspan="3"></td>
+                    {if $priceset}
+                    <td style="padding-left:20px;text-align:right;"><font size="1"> {ts 1=$taxTerm 2=$priceset}BTW maatstaf %2%{/ts}</font></td>
+                    <td style="padding-left:34px;text-align:right"><font size="1" align="right">{$value|crmMoney:$currency}</font></td>
+                    {elseif $priceset == 0}
+                    <td style="padding-left:20px;text-align:right;"><font size="1">{ts 1=$taxTerm}Total{/ts}</font></td>
+                    <td style="padding-left:34px;text-align:right"><font size="1" align="right">{$value|crmMoney:$currency}</font></td>
+                </tr>
+                {/if}
+                {/foreach}
+                <tr>
+                    <td colspan="3"></td>
+                    <td colspan="2"><hr></hr></td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td style="padding-left:20px;text-align:right;"><b><font size="1">{ts 1=$defaultCurrency}Total incl. VAT %1{/ts}</font></b></td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1">{$amount|crmMoney:$currency}</font></td>
+                </tr>
+                {if $is_pay_later == 0}
+                <tr>
+                    <td colspan="3"></td>
+                    <td style="padding-left:20px;text-align:right;"><font size="1">
+                        {if $contribution_status_id == $refundedStatusId}
+                        {ts}...{/ts}
+                        {else}
+                        {ts}Already paid{/ts}
+                        {/if}
+                    </font>
+                    </td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1">{$amount|crmMoney:$currency}</font></td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td colspan="2" ><hr></hr></td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td style="padding-left:20px;text-align:right;"><b><font size="1">{ts}To be paid:{/ts} </font></b></td>
+                    <td style="padding-left:34px;text-align:right;"><b><font size="1">{$amountDue|crmMoney:$currency}</font></b></td>
+                    <td style="padding-left:34px;"><font size="1" align="right"></fonts></td>
+                </tr>
+                {/if}
+                <br/><br/><br/>
+                <tr>
+                    <td colspan="3"></td>
+                </tr>
+                {if $contribution_status_id == $pendingStatusId && $is_pay_later == 1}
+                <tr>
+                    <td><b><font size="1" align="center">{ts 1=$dueDate|date_format:"%e %B %Y"}Due date: %1{/ts}</font></b></td>
+                    <td colspan="3"></td>
+                </tr>
+                {/if}
+
+            </table>
+        </td>
+    </tr>
+</table>
+
+{if $value.tax_amount != ''}
+<table width="615" style="margin-left: -20px;">
+    <tr>
+        <td>
+            <table width="100%" style="padding: 20px; font-size:11px; background-color:#F5F5F5;">
+                <tr>
+                    <td><div style="font-size:11px; font-family: Arial, Verdana, sans-serif;">BTW Vrijstelling tekst....</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+{/if}
+
+
+<table width="615" style="margin-left: -20px;">
+    <col>
+    <tr>
+        <td width="100%" valign="top">
+            <ul>
+
+                <p align="left" style="background: transparent; font-size:10px; font-family: Arial, Verdana, sans-serif;">
+                    <b>ILGA Bank details are</b>
+                </p>
+                <li/>
+                <p align="left" style="font-size:10px; font-family: Arial, Verdana, sans-serif;">
+                    Beneficiary name: ILGA, 20, Rue Rothschild, 1202 Geneva, Switzerland.
+                </p>
+                <li/>
+                <p align="left" style="background: transparent; font-size:10px; font-family: Arial, Verdana, sans-serif;">
+                    <b>Bank name:</b> PostFinance Ltd, Nordring 8, CH-3030 Bern<br><b>IBAN</b> for payments in EUR: CH38 0900 0000 9136 7486 0<br>
+                    <b>BIC ( previously called Swift ):</b> POFICHBEXXX.
+                </p>
+                <p align="left" style="background: transparent; font-size:10px; font-family: Arial, Verdana, sans-serif;">Payment upon receipt of the invoice. If you pay by bank transfer, please make 					sure you pay the bank charges.
+                </p>
+                <p align="left" style="background: transparent; font-size:10px; font-family: Arial, Verdana, sans-serif;">For any inquiry, please contact: finances@ilga.org
+                </p>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<table width="615" style="margin-left: -20px;">
+    <tr>
+        <td>
+            <table width="100%" style="padding: 20px; background-color:#F5F5F5;">
+                <tr>
+                    <td style="padding-right: 10px "><div style="font-size:11px; font-family: Arial, Verdana, sans-serif;"><b>ILGA</b></td>
+                    <td style="padding-right: 10px"></td>
+                    <td style="padding-right: 10px"></td>
+
+                </tr>
+                <tr>
+                    <td style="padding-right: 10px"><div style="font-size:10px; font-family: Arial, Verdana, sans-serif;">20 rue Rothschild  </td>
+                    <td style="padding-right: 10px"><div style="font-size:10px; font-family: Arial, Verdana, sans-serif;">tel. +41 22 731 3254  </td>
+                    <td style="padding-right: 10px"><div style="font-size:10px; font-family: Arial, Verdana, sans-serif;">membership@ilga.org  </td>
+
+
+                </tr>
+                <tr>
+                    <td style="padding-right: 10px"><div style="font-size:10px; font-family: Arial, Verdana, sans-serif;">1202 Geneva, Switzerland  </td>
+                    <td style="padding-right: 10px"><div style="font-size:10px; font-family: Arial, Verdana, sans-serif;">N. féd. CH-660.1.166.015-4 – IDE CHE-455.926.653 </td>
+                    <td style="padding-right: 10px"><div style="font-size:10px; font-family: Arial, Verdana, sans-serif;">www.ilga.org</td>
+
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+{if $contribution_status_id == $pendingStatusId && $is_pay_later == 1}
+
+
+
+{/if}
+
+{if $contribution_status_id == $refundedStatusId || $contribution_status_id == $cancelledStatusId}
+<table width="615" style="margin-left: -20px; padding-top: 67px; page-break-before: always;">
+    <tr>
+        <td align="left"><img src="https://crm.ilga.org/sites/default/files/ilga-logo.jpeg" height="100px" width="100px"></td>
+    </tr>
+</table>
+
+<br><br><br>
+
+<table width="615" style="margin-left: -20px;">
+    <tr>
+        <td>
+            <table width="100%" cellpadding="4" cellspacing="0">
+                <tr valign="top">
+                    <td width="25%"><b><font size="4">{ts}CREDIT NOTE{/ts}</font></b></td>
+                    <td width="25%">&nbsp;</td>
+                    <td width="25%">&nbsp;</td>
+                    <td width="25%">&nbsp;</td>
+                </tr><br><br>
+                <tr valign="top">
+                    <td width="50%" style="border: none; padding: 0cm; font-size:11px; font-family: Arial, Verdana, sans-serif;">
+                        <b>{ts}Klantnummer: {/ts}</b>{contact.contact_id}<br>
+                        <b>{ts}Datum: {/ts}</b>{ts}{$invoice_date|date_format:"%e %B %Y"}{/ts}<br>
+                        <b>{ts}Vervaldatum: {/ts}</b>{ts}{$dueDate|date_format:"%e %B %Y"}{/ts}<br>
+                        <b>{ts}Credit factuurnr: {/ts}</b>{$creditnote_id}<br>
+                    </td>
+                    <td width="50%" align="right" style="border: none; padding: 0cm; font-size:11px; font-family: Arial, Verdana, sans-serif;">
+                        <table>
+                            <tr>
+                                <td>
+                                    {if $organization_name}
+                                    <b><div style="font-size:11px; font-family: Arial, Verdana, sans-serif;">{$organization_name}</div></b>
+                                    {else}
+                                    <b><div style="font-size:11px; font-family: Arial, Verdana, sans-serif;">{$display_name}</div></b>
+                                    {/if}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="font-size:11px; font-family: Arial, Verdana, sans-serif;">
+                                        {contact.street_address}<br>
+                                        {contact.postal_code} {contact.city}<br>
+                                        {contact.country}
+                                    </div>
+                                    <br><br>
+                                    <div style="font-size:11px; font-family: Arial, Verdana, sans-serif;">
+                                        BTW/ONR: {contact.custom_45}
+                                    </div>
+                                    <br>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<table width="645" border="0" cellpadding="-5" cellspacing="1" id="desc" style="margin-left: -20px; font-family: Arial, Verdana, sans-serif;">
+    <tr>
+        <td colspan="2" {$valueStyle}>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0"> {* FIXME: style this table so that it looks like the text version (justification, etc.) *}
+                <tr>
+                    <th style="padding-right: 30px; text-align:left; font-weight:bold; width:180px;"><font size="1">{ts}Description{/ts}</font></th>
+                    <th style="padding-left: 30px; text-align:right; font-weight:bold; width:50px;"><font size="1">{ts}Quantity{/ts}</font></th>
+                    <th style="padding-left: 30px; text-align:right; font-weight:bold; width:60px;"><font size="1">{ts}Unit Price{/ts}</font></th>
+                    <th style="padding-left: 30px; text-align:right; font-weight:bold; width:40px;"><font size="1">{$taxTerm} </font></th>
+                    <th style="padding-left: 30px; text-align:right; font-weight:bold; width:70px;"><font size="1">{ts 1=$defaultCurrency}Amount %1{/ts}</font></th>
+                </tr>
+                {foreach from=$lineItem item=value key=priceset name=pricevalue}
+                {if $smarty.foreach.pricevalue.index eq 0}
+                <tr><td colspan="5"><hr size="3" style="color:#000;"></hr></td></tr>
+                {else}
+                <tr><td colspan="5" style="color:#F5F5F5;"><hr></hr></td></tr>
+                {/if}
+                <tr>
+                    <td style="text-align:left;"  >
+                        <font size="1">
+                            {if $value.html_type eq 'Text'}
+                            {ts}{$value.label}{/ts}
+                            {else}
+                            {ts}{$value.field_title} - {$value.label}{/ts}
+                            {/if}
+                            {if $value.description}
+                            <div>{ts}{$source|truncate:40:"..."}{/ts}</div>
+                            {/if}
+                        </font>
+                    </td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1"> {$value.qty}</font></td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1"> {$value.unit_price|crmMoney:$currency}</font></td>
+                    {if $value.tax_amount != ''}
+                    <td style="padding-left:34px;text-align:right;"><font size="1"> {$value.tax_rate}%</font></td>
+                    {else}
+                    <td style="padding-left:34px;text-align:right"><font size="1" >{ts 1=$taxTerm}No %1{/ts}</font></td>
+                    {/if}
+                    <td style="padding-left:34px;text-align:right;"><font size="1" >{$value.subTotal|crmMoney:$currency}</font></td>
+                </tr>
+                {/foreach}
+                <tr><td  colspan="5" style="color:#F5F5F5;"><hr></hr></td></tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td style="padding-left:20px;text-align:right;"><font size="1">{ts}Sub Total{/ts}</font></td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1"> {$subTotal|crmMoney:$currency}</font></td>
+                </tr>
+                {foreach from = $dataArray item = value key = priceset}
+                <tr>
+                    <td colspan="3"></td>
+                    {if $priceset}
+                    <td style="padding-left:20px;text-align:right;"><font size="1"> {ts 1=$taxTerm 2=$priceset}TOTAL %1 %2%{/ts}</font></td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1" align="right">{$value|crmMoney:$currency}</font> </td>
+                    {elseif $priceset == 0}
+                    <td style="padding-left:20px;text-align:right;"><font size="1">{ts 1=$taxTerm}TOTAL NO %1{/ts}</font></td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1" align="right">{$value|crmMoney:$currency}</font> </td>
+                </tr>
+                {/if}
+                {/foreach}
+                <tr>
+                    <td colspan="3"></td>
+                    <td colspan="2"><hr></hr></td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td style="padding-left:20px;text-align:right;"><b><font size="1">{ts 1=$defaultCurrency}TOTAL %1{/ts}</font></b></td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1">{$amount|crmMoney:$currency}</font></td>
+                </tr>
+                {if $is_pay_later == 0}
+                <tr>
+                    <td colspan="3"></td>
+                    <td style="padding-left:20px;text-align:right;"><font size="1" >{ts}LESS Credit to invoice(s){/ts}</font></td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1">{$amount|crmMoney:$currency}</font></td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td colspan="2" ><hr></hr></td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td style="padding-left:20px;text-align:right;"><b><font size="1">{ts}REMAINING CREDIT{/ts}</font></b></td>
+                    <td style="padding-left:34px;text-align:right;"><b><font size="1">{$amountDue|crmMoney:$currency}</font></b></td>
+                    <td style="padding-left:34px;"><font size="1" align="right"></fonts></td>
+                </tr>
+                {/if}
+                <br/><br/><br/>
+                <tr>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="3"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<br><br><br><br><br>
+
+
+
+<table width="615" style="margin-left: -20px;">
+    <tr>
+        <td>
+            <table width="100%" style="padding: 20px; background-color:#F5F5F5;">
+                <tr>
+                    <td style="padding-right: 10px "><div style="font-size:11px; font-family: Arial, Verdana, sans-serif;"><b>ILGA</b></td>
+                    <td style="padding-right: 10px"></td>
+                    <td style="padding-right: 10px"></td>
+
+                </tr>
+                <tr>
+                    <td style="padding-right: 10px"><div style="font-size:10px; font-family: Arial, Verdana, sans-serif;">20 rue Rothschild  </td>
+                    <td style="padding-right: 10px"><div style="font-size:10px; font-family: Arial, Verdana, sans-serif;">tel. +41 22 731 3254  </td>
+                    <td style="padding-right: 10px"><div style="font-size:10px; font-family: Arial, Verdana, sans-serif;">membership@ilga.org  </td>
+
+
+                </tr>
+                <tr>
+                    <td style="padding-right: 10px"><div style="font-size:10px; font-family: Arial, Verdana, sans-serif;">1202 Geneva, Switzerland  </td>
+                    <td style="padding-right: 10px"><div style="font-size:10px; font-family: Arial, Verdana, sans-serif;">N. féd. CH-660.1.166.015-4 – IDE CHE-455.926.653 </td>
+                    <td style="padding-right: 10px"><div style="font-size:10px; font-family: Arial, Verdana, sans-serif;">www.ilga.org</td>
+
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+{/if}
+</body>
+</html>
