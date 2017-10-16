@@ -223,7 +223,35 @@
 </table>
 {/if}
 
+{if $lang eq "es_ES"}
+{*Spanish Translation*}
+<table width="615" style="margin-left: -20px;">
+    <col>
+    <tr>
+        <td width="100%" valign="top">
+            <ul>
 
+                <p align="left" style="background: transparent; font-size:10px; font-family: Arial, Verdana, sans-serif;">
+                    <b>los datos de la cuenta bancaria de ILGA son</b>
+                </p>
+                <li/>
+                <p align="left" style="font-size:10px; font-family: Arial, Verdana, sans-serif;">
+                    nombre del beneficiario: ILGA, 20, Rue Rothschild, 1202 Geneva, Switzerland.
+                </p>
+                <li/>
+                <p align="left" style="background: transparent; font-size:10px; font-family: Arial, Verdana, sans-serif;">
+                    <b>nombre del banco :</b> PostFinance Ltd, Nordring 8, CH-3030 Bern<br><b>IBAN</b> for payments in EUR: CH38 0900 0000 9136 7486 0<br>
+                    <b>BIC (anteriormente llamado swift):</b> POFICHBEXXX.
+                </p>
+                <p align="left" style="background: transparent; font-size:10px; font-family: Arial, Verdana, sans-serif;">El pago se hace en el momento de recibir la facture/recibo. Si usted paga mediante transferencia bancaria,<br> por favor asegurese de pagar los cargos extras por transferencia bancaria.
+                </p>
+                <p align="left" style="background: transparent; font-size:10px; font-family: Arial, Verdana, sans-serif;">Para cualquier pregunta por favor contactar a: finances@ilga.org
+                </p>
+            </ul>
+        </td>
+    </tr>
+</table>
+{else}{*End Spanish begin English Translation*}
 <table width="615" style="margin-left: -20px;">
     <col>
     <tr>
@@ -250,6 +278,7 @@
         </td>
     </tr>
 </table>
+{/if}{*End English*}
 
 <table width="615" style="margin-left: -20px;">
     <tr>
