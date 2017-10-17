@@ -99,6 +99,111 @@
     </tr>
 </table>
 {/if}{*End English*}
+{if $lang eq "es_ES"}
+{*Spanish Translation*}
+<table width="615" border="0" cellpadding="0" cellspacing="0" id="desc" style="margin-left: -20px; font-family: Arial, Verdana, sans-serif;">
+    <tr>
+        <td colspan="2" {$valueStyle}>
+            <table> {* FIXME: style this table so that it looks like the text version (justification, etc.) *}
+                <tr>
+                    <th style="padding-right:30px;text-align:left;font-weight:bold;width:180px;"><font size="1">Descripción</font></th>
+                    <th style="padding-left:30px;text-align:right;font-weight:bold;width:50px;" ><font size="1">N°</font></th>
+                    <th style="padding-left:30px;text-align:right;font-weight:bold;width:60px;"><font size="1">Unidad/precio</font></th>
+                    <th style="padding-left:30px;text-align:right;font-weight:bold;width:40px;"><font size="1">IVA</font></th>
+                    <th style="padding-left:30px;text-align:right;font-weight:bold;width:70px"><font size="1">Cantidad</font></th>
+                </tr>
+                {foreach from=$lineItem item=value key=priceset name=taxpricevalue}
+                {if $smarty.foreach.taxpricevalue.index eq 0}
+                <tr>
+                    <td colspan="5" ><hr size="3" style="color:#000;"></hr></td>
+                </tr>
+                {else}
+                <tr>
+                    <td colspan="5" style="color:#F5F5F5;"><hr></hr></td>
+                </tr>
+                {/if}
+                <tr>
+                    <td style="text-align:left;"><font size="1">
+                        Importe de la Contribución
+                    </font>
+                    </td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1"> {$value.qty}</font></td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1"> {$value.unit_price|crmMoney:$currency}</font></td>
+                    {if $value.tax_amount != ''}
+                    <td style="padding-left:34px;text-align:right;width:20px;"><font size="1"> {$value.tax_rate}%</font></td>
+                    {else}
+                    <td style="padding-left:34px;text-align:right;width:20px;"><font size="1">{ts 1=$taxTerm}sin impuesto sobre las ventas{/ts}</font></td>
+                    {/if}
+                    <td style="padding-left:34px;text-align:right;"><font size="1">{$value.subTotal|crmMoney:$currency}</font></td>
+                </tr>
+                {/foreach}
+                <tr><td  colspan="5" style="color:#F5F5F5;"><hr></hr></td></tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td style="padding-left:20px;text-align:right;"><font size="1">{ts}Total sin IVA{/ts}</font></td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1"> {$subTotal|crmMoney:$currency}</font></td>
+                </tr>
+                {foreach from = $dataArray item = value key = priceset}
+                <tr>
+                    <td colspan="3"></td>
+                    {if $priceset}
+                    <td style="padding-left:20px;text-align:right;"><font size="1"> {ts 1=$taxTerm 2=$priceset}BTW maatstaf %2%{/ts}</font></td>
+                    <td style="padding-left:34px;text-align:right"><font size="1" align="right">{$value|crmMoney:$currency}</font></td>
+                    {elseif $priceset == 0}
+                    <td style="padding-left:20px;text-align:right;"><font size="1">{ts 1=$taxTerm}Total{/ts}</font></td>
+                    <td style="padding-left:34px;text-align:right"><font size="1" align="right">{$value|crmMoney:$currency}</font></td>
+                </tr>
+                {/if}
+                {/foreach}
+                <tr>
+                    <td colspan="3"></td>
+                    <td colspan="2"><hr></hr></td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td style="padding-left:20px;text-align:right;"><b><font size="1">Total con IVA</font></b></td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1">{$amount|crmMoney:$currency}</font></td>
+                </tr>
+                {if $is_pay_later == 0}
+                <tr>
+                    <td colspan="3"></td>
+                    <td style="padding-left:20px;text-align:right;"><font size="1">
+                        {if $contribution_status_id == $refundedStatusId}
+                        {ts}...{/ts}
+                        {else}
+                        PAGADO
+                        {/if}
+                    </font>
+                    </td>
+                    <td style="padding-left:34px;text-align:right;"><font size="1">{$amount|crmMoney:$currency}</font></td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td colspan="2" ><hr></hr></td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td style="padding-left:20px;text-align:right;"><b><font size="1">A PAGAR</font></b></td>
+                    <td style="padding-left:34px;text-align:right;"><b><font size="1">{$amountDue|crmMoney:$currency}</font></b></td>
+                    <td style="padding-left:34px;"><font size="1" align="right"></fonts></td>
+                </tr>
+                {/if}
+                <br/><br/><br/>
+                <tr>
+                    <td colspan="3"></td>
+                </tr>
+                {if $contribution_status_id == $pendingStatusId && $is_pay_later == 1}
+                <tr>
+                    <td><b><font size="1" align="center">{ts 1=$dueDate|date_format:"%e %B %Y"}Due date: %1{/ts}</font></b></td>
+                    <td colspan="3"></td>
+                </tr>
+                {/if}
+
+            </table>
+        </td>
+    </tr>
+</table>
+{else}{*End Spanish begin English Translation*}
 <table width="615" border="0" cellpadding="0" cellspacing="0" id="desc" style="margin-left: -20px; font-family: Arial, Verdana, sans-serif;">
     <tr>
         <td colspan="2" {$valueStyle}>
@@ -208,6 +313,7 @@
         </td>
     </tr>
 </table>
+{/if}{*End English*}
 
 {if $value.tax_amount != ''}
 <table width="615" style="margin-left: -20px;">
@@ -240,7 +346,7 @@
                 </p>
                 <li/>
                 <p align="left" style="background: transparent; font-size:10px; font-family: Arial, Verdana, sans-serif;">
-                    <b>nombre del banco :</b> PostFinance Ltd, Nordring 8, CH-3030 Bern<br><b>IBAN</b> for payments in EUR: CH38 0900 0000 9136 7486 0<br>
+                    <b>nombre del banco :</b> PostFinance Ltd, Nordring 8, CH-3030 Bern<br><b>IBAN</b> Para pagos en Euros: CH38 0900 0000 9136 7486 0<br>
                     <b>BIC (anteriormente llamado swift):</b> POFICHBEXXX.
                 </p>
                 <p align="left" style="background: transparent; font-size:10px; font-family: Arial, Verdana, sans-serif;">El pago se hace en el momento de recibir la facture/recibo. Si usted paga mediante transferencia bancaria,<br> por favor asegurese de pagar los cargos extras por transferencia bancaria.
